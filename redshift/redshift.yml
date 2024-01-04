@@ -1,0 +1,83 @@
+Description: Monta um redshift na AWS (TODO)
+Resources:
+  RedShiftCluster:
+    Type: AWS::Redshift::Cluster
+    Properties:
+      AllowVersionUpgrade: true
+      AutomatedSnapshotRetentionPeriod: 5
+      AvailabilityZone: us-east-1a
+      ClusterIdentifier: my-redshift-cluster
+      ClusterParameterGroupName: RedshiftParameterGroup
+      ClusterSubnetGroupName: RedshiftSubnetGroup
+      VpcSecurityGroupIds:
+        - RedshiftEC2SecurityGroup
+      ClusterType: multi-node
+      DBName: production
+      Encrypted: true
+      MasterUsername: gobbledygook
+      MasterUserPassword: gobbledygook
+      NodeType: dc2.large
+      NumberOfNodes: 2
+      PubliclyAccessible: true
+  RedshiftParameterGroup:
+    Type: AWS::Redshift::ClusterParameterGroup
+    Properties:
+      Description: Parameter group for redshift cluster
+      ParameterGroupFamily: redshift-1.0
+      Parameters:
+        - ParameterName: max_concurrency_scaling_clusters
+          ParameterValue: 1
+  RedshiftSubnetGroup:
+    Type: AWS::Redshift::ClusterSubnetGroup
+    Properties:
+      Description: Redshift Subnet group
+      SubnetIds:
+        - RedshiftSubnet
+  RedshiftSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: us-east-1a
+      CidrBlock: 10.0.0.0/24
+      VpcId: RedshiftVPC
+  RedshiftVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+  RedshiftEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Redshift. Public access
+      GroupName: redshift-security-group
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 5439
+          IpProtocol: tcp
+          ToPort: 5439
+      SecurityGroupIngress:
+        - CidrIp: 37.156.75.55/32
+          FromPort: 5439
+          IpProtocol: tcp
+          ToPort: 5439
+      VpcId: RedshiftVPC
+  RedshiftVPCInternetGateway:
+    Type: AWS::EC2::InternetGateway
+  RedshiftVPCAttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: RedshiftVPC
+      InternetGatewayId: RedshiftVPCInternetGateway
+  RedshiftRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: RedshiftVPC
+  RedshiftVPCRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: RedshiftVPCInternetGateway
+      RouteTableId: RedshiftRouteTable
+  RedshiftSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: RedshiftRouteTable
+      SubnetId: RedshiftSubnet

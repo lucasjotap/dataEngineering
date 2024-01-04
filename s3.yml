@@ -1,0 +1,12 @@
+Description: Criando primeiro bucket.
+
+Resources:
+  MeuBucketS3:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: aloha-s3-bucket
+      BucketEncryption:
+        ServerSideEncryptionConfiguration: 
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      
