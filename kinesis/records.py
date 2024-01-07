@@ -12,7 +12,7 @@ class Sim:
 
 	def first_simulation(self) -> dict:
 		sim = Simulation(user_pool_size=500, sessions_per_day=1000)
-		events = sim.run(duration_seconds=3)
+		events: list = sim.run(duration_seconds=3) #json list.
 		return events 
 
 	def iterating_thru_records(self) -> None:
@@ -25,12 +25,12 @@ class BotoClass(object):
 	"""
 	Class will handle data serving to s3. 
 	"""
-	client = boto3.client('kinesis')
+	client = boto3.client('kinesis') #
 
 	def send_to_s3(self, event):
 		"""
 		"""
-		data = json.dumps(event).encode('utf-8')
+		data = json.dumps(event).encode('utf-8') # Transforming to string and encoding in utf-8
 		response = BotoClass.client.put_record(
 			StreamName = "kinesis-stream",
 			Data = data,
@@ -41,4 +41,4 @@ class BotoClass(object):
 
 if __name__ == "__main__":
 	sim: object = Sim()
-	sim.iterating_thru_records()
+	print(list(sim.first_simulation()))
