@@ -3,14 +3,19 @@ import boto3
 import logging
 
 from typing import NoReturn, List
+from dataclasses import dataclass
 from botocore.exceptions import ClientError
 
+@dataclass
 class StackDeployment(object):
-
+	"""
+	Classe StackDeployment lidará com a infraestrutura da criação de stacks junto com o CloudFormation.
+	"""
 	logging.getLogger().setLevel(logging.INFO)
 	cloudformation_client = boto3.client('cloudformation')
 
 	def create_stack(self, stack_name, template_body, **kwargs) -> NoReturn:
+		"""Método para a criação de stacks."""
 	    cloudformation_client.create_stack(
 	        StackName=stack_name,
 	        TemplateBody=template_body,
@@ -29,6 +34,7 @@ class StackDeployment(object):
 
 
     def update_stack(self, stack_name, template_body, **kwargs) -> NoReturn:
+    	"""Método para a atualização de stacks, se necessário."""
 	    try:
 	        cloudformation_client.update_stack(
 	            StackName=stack_name,
@@ -50,7 +56,9 @@ class StackDeployment(object):
 	    logging.info(f'UPDATE COMPLETE')
 
 
-    def get_existing_stacks(self):
+    def get_existing_stacks(self) -> str:
+    	"""
+    	"""
 	    response = cloudformation_client.list_stacks(
 	        StackStatusFilter=['CREATE_COMPLETE', 'UPDATE_COMPLETE', 'UPDATE_ROLLBACK_COMPLETE']
 	    )
@@ -75,3 +83,6 @@ class StackDeployment(object):
 	    else:
 	        logging.info(f'CREATING STACK {stack_name}')
 	        self.create_stack(stack_name, template_body)
+
+if __name__ == "__main__":
+	StackDeployment.create_or_update_stack()
