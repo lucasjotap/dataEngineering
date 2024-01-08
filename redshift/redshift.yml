@@ -1,5 +1,6 @@
 Description: Monta um redshift na AWS (TODO)
 Resources:
+
   RedShiftCluster:
     Type: AWS::Redshift::Cluster
     Properties:
@@ -7,10 +8,10 @@ Resources:
       AutomatedSnapshotRetentionPeriod: 5
       AvailabilityZone: us-east-1a
       ClusterIdentifier: my-redshift-cluster
-      ClusterParameterGroupName: RedshiftParameterGroup
+      ClusterParameterGroupName: !Ref RedshiftParameterGroup
       ClusterSubnetGroupName: RedshiftSubnetGroup
       VpcSecurityGroupIds:
-        - RedshiftEC2SecurityGroup
+        - !Ref RedshiftEC2SecurityGroup
       ClusterType: multi-node
       DBName: production
       Encrypted: true
@@ -19,6 +20,7 @@ Resources:
       NodeType: dc2.large
       NumberOfNodes: 2
       PubliclyAccessible: true
+
   RedshiftParameterGroup:
     Type: AWS::Redshift::ClusterParameterGroup
     Properties:
@@ -27,22 +29,26 @@ Resources:
       Parameters:
         - ParameterName: max_concurrency_scaling_clusters
           ParameterValue: 1
+
   RedshiftSubnetGroup:
     Type: AWS::Redshift::ClusterSubnetGroup
     Properties:
       Description: Redshift Subnet group
       SubnetIds:
         - RedshiftSubnet
+
   RedshiftSubnet:
     Type: AWS::EC2::Subnet
     Properties:
       AvailabilityZone: us-east-1a
       CidrBlock: 10.0.0.0/24
       VpcId: RedshiftVPC
+
   RedshiftVPC:
     Type: AWS::EC2::VPC
     Properties:
       CidrBlock: 10.0.0.0/16
+
   RedshiftEC2SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -64,8 +70,8 @@ Resources:
   RedshiftVPCAttachGateway:
     Type: AWS::EC2::VPCGatewayAttachment
     Properties:
-      VpcId: RedshiftVPC
-      InternetGatewayId: RedshiftVPCInternetGateway
+      VpcId: !Ref RedshiftVPC
+      InternetGatewayId: !Ref RedshiftVPCInternetGateway
   RedshiftRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:

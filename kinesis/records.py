@@ -30,6 +30,7 @@ class BotoClass(object):
 
 	def send_to_s3(self, event):
 		"""
+		Method sends events to kinesis.
 		"""
 		data = json.dumps(event).encode('utf-8') # Transforming to string and encoding in utf-8
 		response = BotoClass.client.put_record(
@@ -39,7 +40,6 @@ class BotoClass(object):
 		)
 		return response
 
-
 if __name__ == "__main__":
 	sim: object = Sim()
-	print(list(sim.first_simulation()))
+	sim.iterating_thru_records()
