@@ -2,6 +2,11 @@ Description: Data Lake building.
 
 Resources: 
 
+  DataLakeLogsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: s3-aloha-production-data-lake-logs
+
   DataLakeRawBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -11,7 +16,7 @@ Resources:
             SSEAlgorithm: AES256
       BucketName: s3-aloha-production-data-lake-raw # Use sempre nomes padronizados!
       LoggingConfiguration: 
-        LoggingConfiguration
+        DestinationBucketName: !Ref DataLakeLogsBucket
       PublicAccessBlockConfiguration: 
         BlockPublicAcls: true
         BlockPublicPolicy: true
