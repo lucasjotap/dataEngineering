@@ -1,0 +1,36 @@
+Description: Data Lake building. 
+
+Resources: 
+
+  DataLakeRawBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration: 
+        - ServerSideEncryptionByDefault: 
+            SSEAlgorithm: AES256
+      BucketName: s3-aloha-production-data-lake-raw
+
+      LoggingConfiguration: 
+        LoggingConfiguration
+ 
+      PublicAccessBlockConfiguration: 
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+
+      ReplicationConfiguration: 
+        ReplicationConfiguration
+      Tags: 
+        - Tag
+      VersioningConfiguration: 
+        VersioningConfiguration
+      WebsiteConfiguration: 
+        WebsiteConfiguration
+
+
+  DataLakeProcessedBucket:
+
+
+  DataLakeCurated:
