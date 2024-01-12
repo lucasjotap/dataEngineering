@@ -1,0 +1,29 @@
+Description: 
+
+Resources:
+  DataLakeRawDataBase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Description: Raw data
+        LocationUri: !Join ['/', ['s3:/', !ImportValue data-lake-DataLakeRawDataBucketName]]
+        Name: data_lake_raw
+
+  DataLakeRawDataBase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Description: Processed data
+        LocationUri: !Join ['/', ['s3:/', !ImportValue data-lake-DataLakeProcessedDataBucket]]
+        Name: data_lake_processed
+
+  DataLakeRawDataBase:
+    Type: AWS::Glue::Database
+    Properties:
+      CatalogId: !Ref AWS::AccountId
+      DatabaseInput:
+        Description: Curated data
+        LocationUri: !Join ['/', ['s3:/', !ImportValue data-lake-DataLakeCuratedDataBucket]]
+        Name: data_lake_curated
