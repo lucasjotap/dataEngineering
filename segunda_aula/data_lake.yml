@@ -114,3 +114,34 @@ Resources:
             NoncurrentVersionTransitions:
               - StorageClass: STANDARD_IA
                 TransitionInDays: 15
+
+Outputs:
+  DataLakeRawBucketArn:
+    Value: !GetAtt DataLakeRawBucket.Arn
+    Export:
+      Name: data-lake-DataLakeRawBucketArn
+
+  DataLakeRawBucketArn:
+    Value: !GetAtt DataLakeProcessedBucket.Arn
+    Export:
+      Name: data-lake-DataLakeProcessedBucketArn
+
+  DataLakeRawBucketArn:
+    Value: !GetAtt DataLakeCuratedBucket.Arn
+    Export:
+      Name: data-lake-DataLakeCuratedBucketArn
+
+  DataLakeRawBucketName:
+    Value: !Ref DataLakeRawBucket
+    Export:
+      Name: data-lake-DataLakeRawBucketName
+
+  DataLakeRawBucketName:
+    Value: !Ref DataLakeProcessedBucket
+    Export:
+      Name: data-lake-DataLakeProcessedBucketName
+
+  DataLakeRawBucketName:
+    Value: !Ref DataLakeCuratedBucket
+    Export:
+      Name: data-lake-DataLakeCuratedBucketName
