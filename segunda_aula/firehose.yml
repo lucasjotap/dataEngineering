@@ -1,0 +1,69 @@
+Description: Cria um Kinesis Stream e um Kinesis Data Firehose que vai salvar o stream de dados para um bucket S3.
+
+Resources:
+
+  KinesisFirehoseS3Destination:
+    Type: AWS::KinesisFirehose::DeliveryStream
+    Properties:
+      DeliveryStreamName: kinesis-firehose-s3-delivery-stream
+      DeliveryStreamType: DirectPut
+      ExtendedS3DestinationConfiguration:
+        BucketARN: !ImportValue data-lake-DataLakeRawBucketArn
+        BufferingHints:
+          IntervalInSeconds: 60
+          SizeInMBs: 1
+        CompressionFormat: ZIP
+        ErrorOutputPrefix: bad_record_
+        RoleARN: !GetAtt KinesisRole.Arn
+        Prefix: "atomic_events/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/"
+
+  KinesisRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: firehose.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Description: Role to allow Kinesis to save data to S3
+      ManagedPolicyArns:
+        - !Ref KinesisPolicy
+      Path: /
+      RoleName: role-kinesis
+
+
+  KinesisPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: Policy to allow kinesis to access S3
+      Path: /
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action:
+              - s3:AbortMultipartUpload
+              - s3:GetBucketLocation
+              - s3:GetObject
+              - s3:ListBucket
+              - s3:ListBucketMultipartUploads
+              - s3:PutObject
+            Resource:
+              - !GetAtt KinesisFirehoseBucket.Arn
+              - !Join ["/", [!GetAtt KinesisFirehoseBucket.Arn, "*"]]
+          - Effect: Allow
+            Action:
+              - kinesis:DescribeStream
+              - kinesis:GetShardIterator
+              - kinesis:GetRecords
+              - kinesis:ListShards
+            Resource:
+              - !GetAtt KinesisStream.Arn
+          - Effect: Allow
+            Action:
+              - logs:PutLogEvents
+            Resource:
+              - arn:aws:logs:*:*:*
