@@ -1,0 +1,147 @@
+Description: Data Lake building. 
+
+Resources: 
+
+  DataLakeLogsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: s3-aloha-production-data-lake-logs
+
+  DataLakeRawBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration: 
+        - ServerSideEncryptionByDefault: 
+            SSEAlgorithm: AES256
+      BucketName: s3-aloha-production-data-lake-raw # Use sempre nomes padronizados!
+      LoggingConfiguration: 
+        DestinationBucketName: !Ref DataLakeLogsBucket
+      PublicAccessBlockConfiguration: 
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration: 
+        Status: Enabled
+      WebsiteConfiguration: 
+        WebsiteConfiguration
+      LifecycleConfiguration:
+        Rules:
+          - Id: abort-incomplete-multipart-uploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+          - Id: move-old-objects-to-intelligent-tiering
+            Status: Enabled
+            Transitions:
+              - StorageClass: INTELLIGENT_TIERING
+                TransitionInDays: 90
+          - Id: move-old-versions-to-cheaper-tiering
+            Status: Enabled
+            NoncurrentVersionTransitions:
+              - StorageClass: STANDARD_IA
+                TransitionInDays: 15
+
+  DataLakeProcessedBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration: 
+        - ServerSideEncryptionByDefault: 
+            SSEAlgorithm: AES256
+      BucketName: s3-aloha-production-data-lake-processed # Use sempre nomes padronizados!
+      LoggingConfiguration: 
+        DestinationBucketName: !Ref DataLakeLogsBucket
+      PublicAccessBlockConfiguration: 
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration: 
+        Status: Enabled
+      WebsiteConfiguration: 
+        WebsiteConfiguration
+      LifecycleConfiguration:
+        Rules:
+          - Id: abort-incomplete-multipart-uploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+          - Id: move-old-objects-to-intelligent-tiering
+            Status: Enabled
+            Transitions:
+              - StorageClass: INTELLIGENT_TIERING
+                TransitionInDays: 90
+          - Id: move-old-versions-to-cheaper-tiering
+            Status: Enabled
+            NoncurrentVersionTransitions:
+              - StorageClass: STANDARD_IA
+                TransitionInDays: 15
+
+  DataLakeCurated:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration: 
+        - ServerSideEncryptionByDefault: 
+            SSEAlgorithm: AES256
+      BucketName: s3-aloha-production-data-lake-curated # Use sempre nomes padronizados!
+      LoggingConfiguration: 
+        DestinationBucketName: !Ref DataLakeLogsBucket
+      PublicAccessBlockConfiguration: 
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      VersioningConfiguration: 
+        Status: Enabled
+      WebsiteConfiguration: 
+        WebsiteConfiguration
+      LifecycleConfiguration:
+        Rules:
+          - Id: abort-incomplete-multipart-uploads
+            Status: Enabled
+            AbortIncompleteMultipartUpload:
+              DaysAfterInitiation: 7
+          - Id: move-old-objects-to-intelligent-tiering
+            Status: Enabled
+            Transitions:
+              - StorageClass: INTELLIGENT_TIERING
+                TransitionInDays: 90
+          - Id: move-old-versions-to-cheaper-tiering
+            Status: Enabled
+            NoncurrentVersionTransitions:
+              - StorageClass: STANDARD_IA
+                TransitionInDays: 15
+
+Outputs:
+  DataLakeRawBucketArn:
+    Value: !GetAtt DataLakeRawBucket.Arn
+    Export:
+      Name: data-lake-DataLakeRawBucketArn
+
+  DataLakeRawBucketArn:
+    Value: !GetAtt DataLakeProcessedBucket.Arn
+    Export:
+      Name: data-lake-DataLakeProcessedBucketArn
+
+  DataLakeRawBucketArn:
+    Value: !GetAtt DataLakeCuratedBucket.Arn
+    Export:
+      Name: data-lake-DataLakeCuratedBucketArn
+
+  DataLakeRawBucketName:
+    Value: !Ref DataLakeRawBucket
+    Export:
+      Name: data-lake-DataLakeRawBucketName
+
+  DataLakeRawBucketName:
+    Value: !Ref DataLakeProcessedBucket
+    Export:
+      Name: data-lake-DataLakeProcessedBucketName
+
+  DataLakeRawBucketName:
+    Value: !Ref DataLakeCuratedBucket
+    Export:
+      Name: data-lake-DataLakeCuratedBucketName
