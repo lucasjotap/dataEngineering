@@ -13,7 +13,7 @@ class DataReaderFromAthena(object):
 	def establish_connection(self) -> object:
 		return self.conn: object = connect(work_group='athena-data-engineer-workgroup')
 
-	def read_sql(self):
+	def read_sql(self) -> NoReturn:
 		self.establish_connection()
 		query: str = "select * from data_lake_raw.titanic"
 		df: DataFrame = pd.read_sql(query, conn)
