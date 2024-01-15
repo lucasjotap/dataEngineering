@@ -159,51 +159,6 @@ Resources:
         LocationUri: !Join ['/', ['s3:/', !ImportValue data-lake-DataLakeCuratedDataBucket]]
         Name: data_lake_curated
 
-  RawTitanicTable:
-    Type: AWS::Glue::Table
-    Properties:
-      CatalogId: !Ref AWS::AccountId
-      DatabaseName: !Ref DataLakeRawDatabase
-      TableInput: 
-        Description: Table with Titanic dataset
-        Name: titanic
-        Owner: data-engineering
-        Parameters:
-          skip.header.line.count: 1
-        StorageDescriptor:
-          InputFormat: org.apache.hadoop.mapred.TextInputFormat
-          OutputFormat: org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat
-          Location: !Join ['/', ['s3:/', !ImportValue data-lake-DataLakeRawDataBucketName, 'titanic']]
-          SerdeInfo:
-            Parameters:
-              separatorChar: ','
-              escapeChar: '\'
-              quoteChar: '"'
-            SerializationLibrary: org.apache.hadoop.hive.serde2.OpenCSVSerde
-          Columns:
-            - Name: PassengerId
-              Type: string
-            - Name: PcClass
-              Type: string
-            - Name: Name
-              Type: string
-            - Name: Sex
-              Type: string
-            - Name: Age
-              Type: string
-            - Name: SibSp
-              Type: string
-            - Name: Parch
-              Type: string
-            - Name: Ticket
-              Type: string
-            - Name: Fare
-              Type: string
-            - Name: Cabin
-              Type: string
-            - Name: Embarked
-              Type: string
-
   RawAtomicEventsCrawler:
     Type: AWS::Glue::Crawler
     Properties:
