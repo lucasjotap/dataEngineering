@@ -1,4 +1,3 @@
 # .gitignore
 virtual_environment
 airflow_autoscaling
-
