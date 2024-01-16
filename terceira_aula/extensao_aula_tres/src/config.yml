@@ -1,0 +1,7 @@
+bucket: s3-aloha-production-data-lake-raw
+schema: cryptocurrency
+coins:
+  - BCH
+  - BTC
+  - ETH
+  - LTC
