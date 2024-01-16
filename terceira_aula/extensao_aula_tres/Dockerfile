@@ -8,8 +8,8 @@ ENV BASE_DIR=$BASE_DIR
 ENV IMAGE_REPOSITORY bitcoin_dag-image
 
 RUN mkdir $BASE_DIR
-COPY ./src $BASE_DIR
 COPY ./requirements.txt $BASE_DIR/requirements.txt
-
 RUN pip install -r $BASE_DIR/requirements.txt
+
+COPY ./src $BASE_DIR
 WORKDIR $BASE_DIR

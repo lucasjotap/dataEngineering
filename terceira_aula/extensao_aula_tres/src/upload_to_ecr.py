@@ -1,8 +1,9 @@
-import docker
-import logging
 import os 
-import base64 
-import boto3 
+import boto3
+import docker
+import base64
+import logging 
+ 
 from uuid import uuid4  
 
 class HandlerEcr:
