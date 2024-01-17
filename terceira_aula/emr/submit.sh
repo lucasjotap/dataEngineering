@@ -1,0 +1,2 @@
+aws s3 cp convert_to_parquet.py s3:/s3-prod-emr/jobs/convert_to_parquet.py --profiles lucas_aws;
+aws emr add-steps --profile andre_aws --cluster-id j-34AO4481AAJN --steps Type=Spark, Name="ParquetConversion", ActionOnFailure=CONTINUE
