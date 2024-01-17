@@ -1,0 +1,103 @@
+Description: Deploy EMR 
+
+Resources:
+  EMRCluster:
+    Type: AWS::EMR::Cluster
+    Properties:
+      Applications: 
+        - Name: Spark
+      Instances: 
+        CoreInstanceGroup: 
+          InstanceCount: 1
+          InstanceType: m4.large
+          Market: ON_DEMAND
+          Name: Core
+        MasterInstanceGroup: 
+          InstanceCount: 1
+          InstanceType: m4.large
+          Market: ON_DEMAND
+          Name: Master
+        TerminationProtected: false
+        Ec2SubnetId: !Ref Subnet1
+      Name: EMRCluster
+      LogUri: s3://s3-prod-aloha-emr/logs
+      JobFlowRole: !Ref emrEc2InstanceProfile
+      ReleaseLabel: emr-5.30.1
+      ServiceRole: !Ref emrRole
+      VisibleToAllUsers: true
+
+  emrRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2008-10-17"
+        Statement:
+          - Sid: ""
+            Effect: "Allow"
+            Principal:
+              Service: elasticmapreduce.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: /
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"
+
+  emrEc2Role:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2008-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service: elasticmapreduce.amazonaws.com
+      Path: /
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonElasticMapReduceRole"
+
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: "10.1.0.0/16"
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+
+  Subnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: !Sub "us-east-1a"
+
+  Subnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !Ref RouteTable
+      SubnetId: !Ref Subnet1
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGateway: !Ref InternetGateway
+
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+
+  IgwVPCRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      Gateway: !Ref InternetGateway
+      RouteTableId: !Ref RouteTable
+
+  SparkArtefactS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: s3-prod-aloha-emr
+
+Outputs:
+  EMRClusterId:
+    Value: !Ref EMRCluster
