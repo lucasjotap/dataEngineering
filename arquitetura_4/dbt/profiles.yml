@@ -1,12 +1,12 @@
-redshift:
-   target: dev
+athena:
+   target: athena
    outputs:
-     dev:
-       type: redshift
-       threads: 2
-       host: seu-host-redshift
-       port: 5439
-       user: seu-usuario
-       pass: sua-senha
-       dbname: nome-do-db
-       schema: dbt_dev_bootcamp
+     athena:
+       type: athena
+       database: awsdatacatalog
+       schema: data_lake_curated
+       user: lucas
+       pass: minha_senha_aws
+       dbname: s3://s3-aloha-prod-athena-results
+       threads: 4
+       region_name: us-east-1
