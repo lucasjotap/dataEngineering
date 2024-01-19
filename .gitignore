@@ -1,3 +1,4 @@
 # .gitignore
-virtual_environment
+.venv
 airflow_autoscaling
+arquitetura_4/dbt/logs

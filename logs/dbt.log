@@ -1,0 +1,74 @@
+[0m19:32:44.121964 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fe2b9ce6ce0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fe2b8157070>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fe2b8157010>]}
+
+
+============================== 19:32:44.133388 | aa1fdb62-1877-4d52-be68-69bd4c489d6f ==============================
+[0m19:32:44.133388 [info ] [MainThread]: Running with dbt=1.7.5
+[0m19:32:44.134321 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'profiles_dir': '/home/lucas/.dbt', 'log_path': 'logs', 'fail_fast': 'False', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt init dbt_architecture', 'static_parser': 'True', 'log_format': 'default', 'target_path': 'None', 'introspect': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m19:32:44.135110 [warn ] [MainThread]: [ConfigFolderDirectory]: Unable to parse dict {'dir': PosixPath('/home/lucas/.dbt')}
+[0m19:32:44.135752 [info ] [MainThread]: Creating dbt configuration folder at 
+[0m19:32:44.137357 [debug] [MainThread]: Starter project path: /home/lucas/.local/lib/python3.10/site-packages/dbt/include/starter_project
+[0m19:32:44.141014 [info ] [MainThread]: 
+Your new dbt project "dbt_architecture" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m19:32:44.141826 [info ] [MainThread]: Setting up your profile.
+[0m19:32:48.151878 [error] [MainThread]: Encountered an error:
+cannot import name 'RuntimeException' from 'dbt.exceptions' (/home/lucas/.local/lib/python3.10/site-packages/dbt/exceptions.py)
+[0m19:32:48.156378 [error] [MainThread]: Traceback (most recent call last):
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/cli/requires.py", line 91, in wrapper
+    result, success = func(*args, **kwargs)
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/cli/requires.py", line 76, in wrapper
+    return func(*args, **kwargs)
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/cli/main.py", line 515, in init
+    results = task.run()
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/task/init.py", line 344, in run
+    self.setup_profile(profile_name)
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/task/init.py", line 264, in setup_profile
+    self.create_profile_from_target(adapter, profile_name=profile_name)
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/task/init.py", line 174, in create_profile_from_target
+    load_plugin(adapter)
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/adapters/factory.py", line 212, in load_plugin
+    return FACTORY.load_plugin(name)
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/adapters/factory.py", line 58, in load_plugin
+    mod: Any = import_module("." + name, "dbt.adapters")
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/adapters/athena/__init__.py", line 1, in <module>
+    from dbt.adapters.athena.connections import AthenaConnectionManager
+  File "/home/lucas/.local/lib/python3.10/site-packages/dbt/adapters/athena/connections.py", line 22, in <module>
+    from dbt.exceptions import RuntimeException, FailedToConnectException
+ImportError: cannot import name 'RuntimeException' from 'dbt.exceptions' (/home/lucas/.local/lib/python3.10/site-packages/dbt/exceptions.py)
+
+[0m19:32:48.160522 [debug] [MainThread]: Resource report: {"command_name": "init", "command_wall_clock_time": 4.0428486, "process_user_time": 3.273319, "process_kernel_time": 0.140227, "process_mem_max_rss": "102080", "process_in_blocks": "520", "process_out_blocks": "72", "command_success": false}
+[0m19:32:48.161610 [debug] [MainThread]: Command `dbt init` failed at 19:32:48.161368 after 4.04 seconds
+[0m19:32:48.162314 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fe2b9ce6ce0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fe2b71dbca0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fe2b8157070>]}
+[0m19:32:48.163014 [debug] [MainThread]: Flushing usage events
+[0m19:41:47.185083 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fdbcdf91e70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fdbcc295b70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fdbcc295b10>]}
+
+
+============================== 19:41:47.193679 | b111e653-d33a-45c0-9ff5-193a3c96174f ==============================
+[0m19:41:47.193679 [info ] [MainThread]: Running with dbt=1.7.5
+[0m19:41:47.194719 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'profiles_dir': '/home/lucas/.dbt', 'log_path': 'logs', 'debug': 'False', 'fail_fast': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'log_format': 'default', 'introspect': 'True', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'target_path': 'None', 'invocation_command': 'dbt init dbt_architecture', 'send_anonymous_usage_stats': 'True'}
+[0m19:41:47.196288 [info ] [MainThread]: A project called dbt_architecture already exists here.
+[0m19:41:47.198608 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 0.01938506, "process_user_time": 3.393934, "process_kernel_time": 0.11634, "process_mem_max_rss": "89652", "process_in_blocks": "14344", "process_out_blocks": "8"}
+[0m19:41:47.199702 [debug] [MainThread]: Command `dbt init` succeeded at 19:41:47.199430 after 0.02 seconds
+[0m19:41:47.200505 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fdbcdf91e70>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fdbcc295c30>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fdbcc295de0>]}
+[0m19:41:47.201289 [debug] [MainThread]: Flushing usage events

@@ -1,0 +1,12 @@
+redshift:
+   target: dev
+   outputs:
+     dev:
+       type: redshift
+       threads: 2
+       host: seu-host-redshift
+       port: 5439
+       user: seu-usuario
+       pass: sua-senha
+       dbname: nome-do-db
+       schema: dbt_dev_bootcamp
