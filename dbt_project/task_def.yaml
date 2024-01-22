@@ -1,0 +1,82 @@
+Definition: Creates Airflow Webserver Service
+
+Resources:
+  Type: AWS::IAM::Role
+  Properties:
+    RoleName: "dbt-prod-ecs-task-role"
+    AssumeRolePolicyDocument:
+      Version: "2012-10-17"
+      Statement:
+        - Effect: "Allow"
+        Principal:
+          Service:
+            - "ecs-tasks.amazon.com"
+        Action:
+          - "sts:AssumeRole"
+
+    Policies:
+      - PolicyName: "ECSTaksRolePolicy"
+        PolicyDocument: 
+          Version: "2012-10-17"
+          Statement: 
+            - Effect: "Allow"
+              Action: 
+              - "*"
+            Resource: "*"
+          - Effect: "Allow"
+            Action:
+              - "logs:CreatedLogStream"
+              - "logs:PutLogsEvents"
+            Resource: "*"
+          - Effect: "Allow"
+            Action: 
+              - "s3:ListBuckets"
+              - "s3:PutObject"
+            Resource:
+              - "arn:aws:s3:::s3-aloha-production-data-lake-raw"
+              - "arn:aws:s3:::s3-aloha-production-data-lake-raw/*"
+
+  TaskDefinition:
+      Type: AWS::ECS::TaskDefinition
+      Properties:
+        Cpu: 512
+        Memory: 1024
+        ExecutionRoleArn: !Ref ECSTaskRole
+        TaskRoleArn: !Ref ECSTaskRole
+        Family: "dev-crypto-extract-image"
+        NetworkMode: awsvpc
+        RequiresCompatibilities:
+          -  FARGATE
+        ContainerDefinitions:
+          - Name: "dbt-image"
+            Image: !Sub
+              - "${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/dev-crypto-extract-image:lastest"
+              - ecr_repository: crypto-extract-image
+            Essential: true
+            LogConfiguration:
+              LogDriver: awslogs
+              Options:
+                awslogs-group: airflow-dev-ecs-log-group
+                awslogs-region: us-east-1
+                awslogs-stream-prefix: crypto-extract
+
+  SecurityGroup:
+    Type: AWS::ECS::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Airflow webserver. Allow all inbound traffic.
+      GroupName: "api-extract-security-group"
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 0 
+          IpProtocol: -1
+          ToPort: 0
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 0 
+          IpProtocol: -1
+          ToPort: 0
+      VpcId: vpc-049aa67352c7dd4c2
+
+Outputs:
+  SecurityGroup:
+    Value: !Ref SecurityGroup

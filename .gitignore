@@ -1,5 +1,4 @@
 # .gitignore
 .venv
-airflow_autoscaling
 arquitetura_4/dbt/logs
 unit_tests

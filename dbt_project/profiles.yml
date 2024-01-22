@@ -1,0 +1,10 @@
+athena:
+  target: athena
+  outputs:
+    athena:
+      type: athena
+      database: awsdatacatalog
+      schema: dev
+      region_name: eu-west-1
+      threads: 8
+      s3_staging_dir: s3://athena-staging-bucket/
