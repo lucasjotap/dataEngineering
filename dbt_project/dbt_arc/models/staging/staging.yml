@@ -1,0 +1,4 @@
+sources:
+  - name: data_lake_raw
+    tables:
+      - name: atomic_events
