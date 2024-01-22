@@ -1,4 +1,4 @@
-Definition: Creates Airflow Webserver Service
+Definition: DBT
 
 Resources:
   Type: AWS::IAM::Role
@@ -50,21 +50,21 @@ Resources:
         ContainerDefinitions:
           - Name: "dbt-image"
             Image: !Sub
-              - "${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/dev-crypto-extract-image:lastest"
-              - ecr_repository: crypto-extract-image
+              - "${AWS::AccountId}.dkr.ecr.us-east-1.amazonaws.com/dbt-image:lastest"
+              - ecr_repository: dbt-image
             Essential: true
             LogConfiguration:
               LogDriver: awslogs
               Options:
                 awslogs-group: airflow-dev-ecs-log-group
                 awslogs-region: us-east-1
-                awslogs-stream-prefix: crypto-extract
+                awslogs-stream-prefix: dbt-image
 
   SecurityGroup:
     Type: AWS::ECS::SecurityGroup
     Properties:
       GroupDescription: Security group for Airflow webserver. Allow all inbound traffic.
-      GroupName: "api-extract-security-group"
+      GroupName: "dbt-security-group"
       SecurityGroupEgress:
         - CidrIp: 0.0.0.0/0
           FromPort: 0 
